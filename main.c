@@ -52,7 +52,10 @@ int main(){
     while (1){
         board_print(&board);
         if (!read_play(&board, player)) break;
-        if (game_end(&board)) break;
+        if (game_end(&board)) {
+            board_print(&board);
+            break;
+        }
         player = (player == 'x') ? 'o' : 'x';
     }
     return 0;
