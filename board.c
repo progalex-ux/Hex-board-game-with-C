@@ -1,7 +1,7 @@
 #include "board.h"
 
 int board_init(board_t* board, int size){
-    if ( size < 1) return 0;
+    if (board == NULL || size < 1 || size > BOARD_MAX_MEMORY_SIZE) return 0;
 
     board->size = size;
     for (int row = 0; row < size; row++) {
