@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "engine.h"
-#include "monte_carlo.h"
-#include <unistd.h>
 
 #define BUFLEN 128
 
@@ -47,37 +45,15 @@ int read_play(board_t* board, char player){
 
 int main(){
     board_t board;
-    if (!board_init(&board, 7)) return 1;
-    const unsigned simulations = 100;
-    long available = sysconf(_SC_NPROCESSORS_ONLN);
-    unsigned threads = available > 0 ? (unsigned)available : 1;
-    char human, computer;
-    do {
-        printf("Elige tu ficha (x conecta numeros, o conecta letras) [x/o]: ");
-        fflush(stdout);
-        int ch = getchar();
-        while (getchar() != '\n' && !feof(stdin)) {}
-        human = (char)ch;
-    } while (human != 'x' && human != 'o');
-    computer = human == 'x' ? 'o' : 'x';
-    char current = 'x';
+    board_init(&board, 7);
+
+    char player = 'x';
+    
     while (1){
         board_print(&board);
-        int state;
-        if (current == human) {
-            if (!read_play(&board, human)) break;
-        } else {
-            int move = monte_carlo_move(&board, computer, simulations, threads);
-            if (move < 0 || !board_play(&board, move / board.size, move % board.size, computer)) break;
-            // printf("La computadora (%c) juega %c%d (%u simulaciones, %u hilos).\n", computer, 'A' + move % board.size, move / board.size + 1, simulations, threads);
-        }
-        state = game_state(&board);
-        if (state) {
-            board_print(&board);
-            printf("Gana el jugador '%c'.\n", state == 1 ? 'x' : 'o');
-            break;
-        }
-        current = current == 'x' ? 'o' : 'x';
+        if (!read_play(&board, player)) break;
+        if (game_end(&board)) break;
+        player = (player == 'x') ? 'o' : 'x';
     }
     return 0;
 }

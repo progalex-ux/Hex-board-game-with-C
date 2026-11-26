@@ -2,10 +2,17 @@
 #define ENGINE_H
 // o --> arriba a abajo
 // x --> izquierda a derecha
+#include <stdint.h>
 #include "board.h"
-int game_xwins( board_t* board);
-int game_owins( board_t* board);
+
+typedef struct {
+    unsigned size;
+    int64_t stat[BOARD_MAX_SIZE][BOARD_MAX_SIZE]
+} bstat_t;
+
+int game_xwins(const board_t* board);
+int game_owins(const board_t* board);
 
 int game_end(board_t* board);
-int game_state(const board_t* board); /* 0 continúa, 1 gana x, 2 gana o */
+int game_stats(const board_t* board, bstat_t* st); 
 #endif // ENGINE_H

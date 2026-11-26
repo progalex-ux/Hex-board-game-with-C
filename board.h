@@ -15,6 +15,7 @@ typedef struct {
 
 
 int board_init (board_t* board, int size);
+int board_copy( board_t* cp, const board_t* bd);
 void board_print(const board_t* board); // función para imprimir el tablero
 int board_play(board_t* board, int row, int col, char color); // función para colocar una ficha en el tablero
 
